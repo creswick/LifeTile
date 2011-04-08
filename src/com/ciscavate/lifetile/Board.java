@@ -58,7 +58,8 @@ public class Board {
 				next = getRight(blankIdx);
 				break;
 			case 3: // below
-				next = getBelow(blankIdx);
+				//next = getBelow(blankIdx);
+				break;
 			default:
 				Log.e(LT.TAG, "Unexpected direction: " + direction
 						+ " in randomize!");
@@ -164,6 +165,24 @@ public class Board {
 
 	public int getCols() {
 		return _cols;
+	}
+
+	/** 
+	 * Check to see if the game is solved.
+	 * 
+	 * @return
+	 */
+	public boolean isSolved() {
+		int count = 0;
+	
+		for (Tile t : _tiles) {
+			if (t.getNum() != count) {
+				Log.i(LT.TAG, "Puzzle not solved, tile num "+t.getNum()+" is misplaced at index: "+count);
+				return false;
+			}
+			count++;
+		}
+		return true;
 	}
 
 }

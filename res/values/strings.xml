@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, LifeTileActivity!</string>
     <string name="app_name">LifeTile</string>
+    <string name="congrats">Congratulations, you\'ve solved the puzzle!</string>
 </resources>

@@ -12,7 +12,9 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class BoardView extends View {
 	
@@ -41,6 +43,46 @@ public class BoardView extends View {
         _borderPaint = new Paint(_textPaint);
         _borderPaint.setStrokeWidth(0);
         _borderPaint.setStyle(Style.STROKE);
+        
+        setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				float x = event.getX();
+				float y = event.getY();
+				
+				Log.i(LT.TAG, "Handling touch event at ("+x+","+y+")");
+				
+				// get the tile index at x, y.
+				int target = getTile(x,y);
+				Log.i(LT.TAG, "Touch event on tile @ "+target);
+				if (-1 != target) {
+					_board.swap(target);
+					if (_board.isSolved()) {
+						Log.i(LT.TAG, "Congrats!");
+						Toast t = Toast.makeText(_context, R.string.congrats, Toast.LENGTH_LONG);
+						t.show();
+					} else {
+						Log.i(LT.TAG, "Nope, not solved yet.");
+					}
+					// force a redraw:
+					BoardView.this.invalidate();
+				}
+
+				return true;
+			}
+		});
+	}
+
+	protected int getTile(float x, float y) {
+		for (int i = 0; i < _board.getTiles().size(); i++) {
+			Rect tile = tileLoc(i, _board.getRows(), _board.getCols());
+			
+			if (tile.contains((int)x, (int)y)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private Rect getScreenDimensions() {
@@ -74,7 +116,7 @@ public class BoardView extends View {
 //			canvas.drawBitmap(getCamView(),
 //							  imageDims, 
 //							  tileLocation, null);
-			Log.i(LT.TAG, "drawing tile "+tile.getNum()+" at "+tileLocation.left+", "+tileLocation.top);
+//			Log.i(LT.TAG, "drawing tile "+tile.getNum()+" at "+tileLocation.left+", "+tileLocation.top);
 		}
 	}
 
@@ -89,7 +131,7 @@ public class BoardView extends View {
 		int tRow = num / cols;
 		int tCol = num % cols;
 		
-		Log.i(LT.TAG, "tCol: "+tCol+"tRow: "+tRow);
+//		Log.i(LT.TAG, "tCol: "+tCol+"tRow: "+tRow);
 		
 		int tWidth = _screenDims.width() / cols;
 		int tHeight = _screenDims.height() / rows;

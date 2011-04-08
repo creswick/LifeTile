@@ -14,7 +14,7 @@ public class LifeTileActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _board = new Board(4,8);
+        _board = new Board(4,4);
         _boardView = new BoardView(this, _board);
 
         
